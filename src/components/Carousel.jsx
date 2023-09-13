@@ -264,7 +264,7 @@ function Banner({ type, image, title, subtitle, button }) {
         >
           <div className="w-full h-full flex flex-col sm:gap-8 md:flex-row md:items-center xl:gap-16">
             <img
-              className="lg:basis-5/12 w-full h-[288px] object-cover my-4 rounded md:h-fit "
+              className="lg:basis-5/12 w-full h-[288px] object-cover my-4 rounded "
               src={image}
             />
             <div className="flex flex-col gap-4">

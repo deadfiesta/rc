@@ -11,7 +11,7 @@ function App() {
         <Carousel type={2} />
         <Carousel type={3} />
         {/** Change type to 1, 2, 3 for different variants */}
-
+        <FeaturedRedemption />
       </main>
     </>
   );
