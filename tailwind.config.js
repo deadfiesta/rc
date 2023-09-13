@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       boxShadow: {
+        sm: '0px 6px 16px 0px rgba(20, 20, 20, 0.30)',
         md: '0px 8px 40px 0px rgba(20, 20, 20, 0.10)',
       },
       screens: {
