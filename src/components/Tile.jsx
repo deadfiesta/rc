@@ -5,7 +5,7 @@ const Tile = ({ type, data }) => {
     default:
     case "featured":
       return (
-        <div className="bg-neutral-100 h-full rounded-lg border border-neutral-400 flex flex-col">
+        <div className="bg-neutral-100 h-full shadow-none rounded-lg border border-neutral-400 flex flex-col cursor-pointer transition-colors transition-shadow hover:border-neutral-900 hover:shadow-xl">
           <div className="grow py-8 px-12 grid place-items-center">
             <img
               className={`${
