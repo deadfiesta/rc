@@ -8,10 +8,10 @@ function App() {
       <main className="min-h-screen bg-neutral-200">
         <Navbar />
         <Carousel type={1} />
-        {/** Change type to 1, 2, 3 for different variants */}
         <Carousel type={2} />
         <Carousel type={3} />
-        <FeaturedRedemption />
+        {/** Change type to 1, 2, 3 for different variants */}
+
       </main>
     </>
   );

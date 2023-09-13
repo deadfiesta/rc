@@ -231,7 +231,7 @@ function Banner({ type, image, title, subtitle, button }) {
             marketingBanners.length > 1 && 'sm:px-20 md:px-24'
           }`}
         >
-          <div className="w-full h-full flex flex-col flex-col-reverse sm:gap-8 justify-end md:flex-row xl:gap-16 md:items-center ">
+          <div className="w-full h-full flex flex-col-reverse sm:gap-8 justify-end md:flex-row xl:gap-16 md:items-center ">
             <div className="flex flex-col gap-4">
               <h1 className="text-4xl font-bold text-neutral-900 lg:text-5xl">
                 {title}
@@ -248,7 +248,7 @@ function Banner({ type, image, title, subtitle, button }) {
               )}
             </div>
             <img
-              className="lg:basis-5/12 w-full h-[288px] object-cover my-4 rounded md:h-fit "
+              className="lg:basis-5/12 w-full h-[288px] object-cover my-4 rounded"
               src={image}
             />
           </div>
