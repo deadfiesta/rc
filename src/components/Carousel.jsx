@@ -271,7 +271,7 @@ function Banner({ i, type, image, title, subtitle, button, banners }) {
     case 5: //Standard carousels
       return (
         <>
-          <Container css="h-full">
+          <Container css="h-full overflow-x-hidden">
             <div
               className={`flex flex-col lg:flex-row items-center h-full w-full gap-4 lg:gap-14 py-20 sm:px-24`}
             >
