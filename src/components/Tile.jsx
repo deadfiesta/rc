@@ -1,4 +1,6 @@
 import React from "react";
+import { useState } from "react";
+import { animated, useSpring } from "@react-spring/web";
 
 const Tile = ({ type, data }) => {
   switch (type) {
@@ -26,7 +28,45 @@ const Tile = ({ type, data }) => {
         </div>
       );
       break;
+    case "money":
+      return (
+        <TileAnimationWrapper>
+          <div className="bg-neutral-100 cursor-pointer w-full h-full flex flex-col rounded-2xl overflow-hidden transition-shadow duration-300 shadow-none hover:shadow-md">
+            <img
+              src={data.image}
+              alt={`${data.title} thumbnail`}
+              className="h-[218px] overflow-hidden object-cover"
+            />
+            <div className="py-4 px-6 font-bold grow text-center grid place-items-center">
+              {data.title}
+            </div>
+          </div>
+        </TileAnimationWrapper>
+      );
   }
 };
+
+function TileAnimationWrapper({ children }) {
+  const [hover, setHover] = useState(false);
+  const { y } = useSpring({
+    y: hover ? 7.5 : 0,
+    config: {
+      mass: .5,
+      tension: 200,
+      friction: 18,
+    }
+  });
+  return (
+    <animated.div className={"w-full h-full"}
+      style={{
+        transform: y.to((value) => `translateY(-${value}%)`),
+      }}
+      onPointerEnter={() => setHover(true)}
+      onPointerLeave={() => setHover(false)}
+    >
+      {children}
+    </animated.div>
+  );
+}
 
 export default Tile;

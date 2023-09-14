@@ -20,6 +20,7 @@ import {
   faChevronDown,
   faStar,
   faXmark,
+  faSuitcaseRolling,
 } from '@fortawesome/free-solid-svg-icons';
 
 const menu = ['Redeem Rewards', 'Earn more'];
@@ -29,6 +30,11 @@ const products = [
       icon: <FontAwesomeIcon icon={faPlaneDeparture} />,
       title: 'Frequent Traveler Program',
       description: 'Earn travel perks with frequent journey rewards.',
+    },
+    {
+      icon: <FontAwesomeIcon icon={faSuitcaseRolling} />,
+      title: 'Travel',
+      description: 'Book with points and choose from 200 airlines & 900,000 hotels globally',
     },
     {
       icon: <FontAwesomeIcon icon={faGift} />,
@@ -49,11 +55,6 @@ const products = [
       icon: <FontAwesomeIcon icon={faWallet} />,
       title: 'Cryptocurrency',
       description: 'Digital assets for investment and trading opportunities.',
-    },
-    {
-      icon: <FontAwesomeIcon icon={faStar} />,
-      title: 'Movie Pass',
-      description: 'Enjoy free movie tickets and exclusive screenings.',
     },
   ],
   [
@@ -136,6 +137,10 @@ const Navbar = () => {
     }
   }, [hover, hoveredTab]); //Animate navigation underline
 
+  useEffect(()=> {
+    document.body.classList.toggle('overflow-y-hidden', openMenu)
+  }, [openMenu])
+
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
     return () => {
@@ -145,13 +150,14 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="relative">
-        <div className="relative border-b border-neutral-400 bg-neutral-100 z-50 h-[72px] sm:min-h-[73px] flex items-center">
+      <nav className="h-[73px]" >
+      <div className="fixed z-50 w-full top-o left-0">
+        <div className="relative border-b border-neutral-400 bg-neutral-100 z-50 h-[73px] flex items-center">
           <Container css="w-full">
             <div className="flex gap-16 ">
               <div className="flex gap-6 items-center text-xl">
                 <div
-                  onClick={() => setOpenMenu(!openMenu)}
+                  onClick={()=>setOpenMenu(!openMenu)}
                   className="lg:hidden cursor-pointer"
                 >
                   <Button type="icon" icon={faBars} />
@@ -175,8 +181,8 @@ const Navbar = () => {
               </ul>
               <div className="flex gap-6 items-center grow justify-end">
                 <div className="hidden sm:flex gap-1">
-                  <span>You have:</span>
-                  <span className="font-bold">
+                  <span className="whitespace-nowrap">You have:</span>
+                  <span className="whitespace-nowrap font-bold">
                     {getPoints} {account.currency}
                   </span>
                 </div>
@@ -237,6 +243,7 @@ const Navbar = () => {
           menu={menu}
           products={products}
         />
+        </div>
       </nav>
     </>
   );
@@ -316,7 +323,7 @@ function MobileNav({ show, setShow, menu, products }) {
 function SecondaryNav({ products }) {
   return (
     <>
-      <div className="bg-neutral-100 w-screen overflow-x-hidden">
+      <div className="bg-neutral-100 w-screen overflow-x-hidden shadow-md">
         <Container>
           <ul className="py-6 grid grid-cols-3 gap-x-8 gap-y-4 items-stretch">
             {products.map((product, i) => (
