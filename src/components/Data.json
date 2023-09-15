@@ -1,4 +1,44 @@
 {
+  "menu": [
+    {
+      "title": "Redeem Rewards"
+    },
+    {
+      "title": "Earn more"
+    }
+  ],
+  "redeem": [
+    {
+      "title": "Frequent Traveler Program",
+      "description": "Earn travel perks with frequent journey rewards."
+    },
+    {
+      "title": "Travel",
+      "description": "Book with points and choose from 200 airlines & 900,000 hotels globally"
+    },
+    {
+      "title": "Gift Cards",
+      "description": "Flexible rewards with various shopping choices."
+    },
+    {
+      "title": "Cashback",
+      "description": "Instant savings with cash returned on purchases."
+    },
+    {
+      "title": "Carbon Offset",
+      "description": "Eco-friendly rewards for sustainability support."
+    },
+    {
+      "title": "Cryptocurrency",
+      "description": "Digital assets for investment and trading opportunities."
+    }
+  ],
+  "offers": [
+    {
+      "title": "Offers",
+      "description": "Versatile reward options to suit your preferences."
+    }
+  ],
   "defaultBanners": [
     {
       "title": "A world of rewards awaits",
@@ -23,10 +63,7 @@
     {
       "title": "Reward made awesome",
       "subtitle": "Earn points faster than ever and use them to turn dreams into exciting adventures.",
-      "image": [
-        "/images/banner-5-1.jpg",
-        "/images/banner-5-2.jpg"
-      ]
+      "image": ["/images/banner-5-1.jpg", "/images/banner-5-2.jpg"]
     }
   ],
   "carouselBanners": [
@@ -89,24 +126,46 @@
   ],
   "quicklinkTiles": [
     {
-        "title": "Transfer to British Airways Executive Club",
-        "image": "/images/quicklink-1.jpg"
-      },
-      {
-        "title": "Offset your carbon footprint",
-        "image": "/images/quicklink-2.jpg"
-      },
-      {
-        "title": "Exchange points for crypto",
-        "image": "/images/quicklink-3.jpg"
-      },
-      {
-        "title": "Shop at Door Dash",
-        "image": "/images/quicklink-4.jpg"
-      },
-      {
-        "title": "Shop at Macy's",
-        "image": "/images/quicklink-5.jpg"
-      }
+      "title": "Transfer to British Airways Executive Club",
+      "image": "/images/quicklink-1.jpg"
+    },
+    {
+      "title": "Offset your carbon footprint",
+      "image": "/images/quicklink-2.jpg"
+    },
+    {
+      "title": "Exchange points for crypto",
+      "image": "/images/quicklink-3.jpg"
+    },
+    {
+      "title": "Shop at Door Dash",
+      "image": "/images/quicklink-4.jpg"
+    },
+    {
+      "title": "Shop at Macy's",
+      "image": "/images/quicklink-5.jpg"
+    }
+  ],
+  "footer": [
+    {
+      "title": "Help Center",
+      "href": ""
+    },
+    {
+      "title": "Terms of Use",
+      "href": ""
+    },
+    {
+      "title": "Customer Service Specific Terms",
+      "href": ""
+    },
+    {
+      "title": "Privacy Policy",
+      "href": ""
+    }
+  ],
+  "footerParagraph": [
+    "At Ascenda, we're your passport to unforgettable journeys and dream vacations. Our rewards program is designed to elevate your travel experience, whether you're accumulating miles, redeeming gift cards, or enjoying the perks of frequent traveler programs. With card-linked offers, we bring the world to your fingertips, one step closer to your dream destination. We're committed to turning your travel aspirations into reality, so join us today and let's embark on an incredible adventure together.",
+    "As avid travelers ourselves, we understand the anticipation and excitement that comes with planning your next escape. That's why we're dedicated to providing you with a seamless and rewarding booking experience. Our team of experts curates exclusive deals, insider tips, and travel inspiration to ensure your journey is not just memorable, but extraordinary. So, whether you're exploring new cultures, seeking relaxation on a pristine beach, or venturing into the unknown, trust us to be your trusted companion on the road to discovery. Bon voyage!"
   ]
 }

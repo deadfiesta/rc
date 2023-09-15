@@ -1,12 +1,11 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
-import { animated, useSpring, useTransition } from '@react-spring/web';
-import AscendaLogo from '../assets/AscendaLogo';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Container from './Container';
-import Button from './Button';
-import Link from './Link';
-import Scrium from './Scrium';
-import { footer } from './Footer';
+import { useState, useEffect, useRef, useMemo } from "react";
+import { animated, useSpring, useTransition } from "@react-spring/web";
+import AscendaLogo from "../assets/AscendaLogo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Container from "./Container";
+import Button from "./Button";
+import Link from "./Link";
+import Scrium from "./Scrium";
 import {
   faBars,
   faCircleUser,
@@ -18,56 +17,29 @@ import {
   faTags,
   faArrowRightToBracket,
   faChevronDown,
-  faStar,
   faXmark,
   faSuitcaseRolling,
-} from '@fortawesome/free-solid-svg-icons';
+} from "@fortawesome/free-solid-svg-icons";
+import Data from "./Data.json";
 
-const menu = ['Redeem Rewards', 'Earn more'];
-const products = [
+const { menu, redeem, offers, footer } = Data;
+
+const products = [redeem, offers];
+const faIcons = [
   [
-    {
-      icon: <FontAwesomeIcon icon={faPlaneDeparture} />,
-      title: 'Frequent Traveler Program',
-      description: 'Earn travel perks with frequent journey rewards.',
-    },
-    {
-      icon: <FontAwesomeIcon icon={faSuitcaseRolling} />,
-      title: 'Travel',
-      description: 'Book with points and choose from 200 airlines & 900,000 hotels globally',
-    },
-    {
-      icon: <FontAwesomeIcon icon={faGift} />,
-      title: 'Gift Cards',
-      description: 'Flexible rewards with various shopping choices.',
-    },
-    {
-      icon: <FontAwesomeIcon icon={faMoneyBill1} />,
-      title: 'Cashback',
-      description: 'Instant savings with cash returned on purchases..',
-    },
-    {
-      icon: <FontAwesomeIcon icon={faLeaf} />,
-      title: 'Carbon Offset',
-      description: 'Eco-friendly rewards for sustainability support.',
-    },
-    {
-      icon: <FontAwesomeIcon icon={faWallet} />,
-      title: 'Cryptocurrency',
-      description: 'Digital assets for investment and trading opportunities.',
-    },
+    <FontAwesomeIcon icon={faPlaneDeparture} />,
+    <FontAwesomeIcon icon={faSuitcaseRolling} />,
+    <FontAwesomeIcon icon={faGift} />,
+    <FontAwesomeIcon icon={faMoneyBill1} />,
+    <FontAwesomeIcon icon={faLeaf} />,
+    <FontAwesomeIcon icon={faWallet} />,
   ],
-  [
-    {
-      icon: <FontAwesomeIcon icon={faTags} />,
-      title: 'Offers',
-      description: 'Versatile reward options to suit your preferences.',
-    },
-  ],
+  [<FontAwesomeIcon icon={faTags} />],
 ];
+
 const account = {
-  points: '[0,000,000]',
-  currency: '[rewards_cur]',
+  points: "[0,000,000]",
+  currency: "[rewards_cur]",
 };
 
 const Navbar = () => {
@@ -125,7 +97,7 @@ const Navbar = () => {
   }; //Close my account on click outside
 
   useEffect(() => {
-    let hovered = document.querySelector('.menu').childNodes[hoveredTab];
+    let hovered = document.querySelector(".menu").childNodes[hoveredTab];
     hovered !== null &&
       api.start({
         opacity: hover ? 1 : 0,
@@ -137,112 +109,116 @@ const Navbar = () => {
     }
   }, [hover, hoveredTab]); //Animate navigation underline
 
-  useEffect(()=> {
-    document.body.classList.toggle('overflow-y-hidden', openMenu)
-  }, [openMenu])
+  useEffect(() => {
+    document.body.classList.toggle("overflow-y-hidden", openMenu);
+  }, [openMenu]);
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, []);
 
   return (
     <>
-      <nav className="h-[73px]" >
-      <div className="fixed z-50 w-full top-o left-0">
-        <div className="relative border-b border-neutral-400 bg-neutral-100 z-50 h-[73px] flex items-center">
-          <Container css="w-full">
-            <div className="flex gap-16 ">
-              <div className="flex gap-6 items-center text-xl">
-                <div
-                  onClick={()=>setOpenMenu(!openMenu)}
-                  className="lg:hidden cursor-pointer"
-                >
-                  <Button type="icon" icon={faBars} />
+      <nav className="h-[73px]">
+        <div className="fixed z-50 w-full top-o left-0">
+          <div className="relative border-b border-neutral-400 bg-neutral-100 z-50 h-[73px] flex items-center">
+            <Container css="w-full">
+              <div className="flex gap-16 ">
+                <div className="flex gap-6 items-center text-xl">
+                  <div
+                    onClick={() => setOpenMenu(!openMenu)}
+                    className="lg:hidden cursor-pointer"
+                  >
+                    <Button type="icon" icon={faBars} />
+                  </div>
+                  <AscendaLogo />
                 </div>
-                <AscendaLogo />
+                <ul
+                  className="menu relative hidden lg:flex gap-4"
+                  onMouseEnter={() => setHover(true)}
+                  onMouseLeave={() => setHover(false)}
+                >
+                  {menu.map(({ title }, i) => (
+                    <li key={title} onMouseEnter={() => setHoveredTab(i)}>
+                      <NavMenu>{title}</NavMenu>
+                    </li>
+                  ))}
+                  <animated.li
+                    style={style}
+                    className="absolute left-0 opacity-0 bottom-0 w-0 h-0.5 bg-neutral-900"
+                  ></animated.li>
+                </ul>
+                <div className="flex gap-6 items-center grow justify-end">
+                  <div className="hidden sm:flex gap-1">
+                    <span className="whitespace-nowrap">You have:</span>
+                    <span className="whitespace-nowrap font-bold">
+                      {getPoints} {account.currency}
+                    </span>
+                  </div>
+                  <span className="hidden sm:block w-px h-6 bg-neutral-400 text-primary-500" />
+                  <div
+                    ref={myAccount}
+                    className="cursor-pointer"
+                    onClick={() => setShowMyAccount(!showMyAccount)}
+                  >
+                    <Button type="icon" icon={faCircleUser} />
+                  </div>
+                </div>
               </div>
-              <ul
-                className="menu relative hidden lg:flex gap-4"
+            </Container>
+          </div>
+          {/** Secondary navigation transition */}
+          {secondaryNavTransitions((style, hover) =>
+            hover ? (
+              <animated.div
+                className="hidden absolute z-1 shadow-elevation-md lg:block z-40"
+                style={style}
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
               >
-                {menu.map((tab, i) => (
-                  <li key={tab} onMouseEnter={() => setHoveredTab(i)}>
-                    <NavMenu>{tab}</NavMenu>
-                  </li>
-                ))}
-                <animated.li
-                  style={style}
-                  className="absolute left-0 opacity-0 bottom-0 w-0 h-0.5 bg-neutral-900"
-                ></animated.li>
-              </ul>
-              <div className="flex gap-6 items-center grow justify-end">
-                <div className="hidden sm:flex gap-1">
-                  <span className="whitespace-nowrap">You have:</span>
-                  <span className="whitespace-nowrap font-bold">
-                    {getPoints} {account.currency}
-                  </span>
-                </div>
-                <span className="hidden sm:block w-px h-6 bg-neutral-400 text-primary-500" />
-                <div
-                  ref={myAccount}
-                  className="cursor-pointer"
-                  onClick={() => setShowMyAccount(!showMyAccount)}
+                <SecondaryNav iconSet={faIcons[hoveredTab]} products={products[hoveredTab]} />
+              </animated.div>
+            ) : (
+              ""
+            )
+          )}
+          {/** Secondary my account transition */}
+          {myAccountTransition((style, click) =>
+            click ? (
+              <>
+                <Container css="hidden sm:block relative">
+                  <div className="absolute px-1 right-0 z-50 flex justify-end">
+                    <animated.div ref={modal} style={style}>
+                      <MyAccount />
+                    </animated.div>
+                  </div>
+                </Container>
+                <MobileSideDrawer
+                  show={showMyAccount}
+                  setShow={setShowMyAccount}
+                  screen="sm:hidden"
                 >
-                  <Button type="icon" icon={faCircleUser} />
-                </div>
-              </div>
-            </div>
-          </Container>
-        </div>
-        {/** Secondary navigation transition */}
-        {secondaryNavTransitions((style, hover) =>
-          hover ? (
-            <animated.div
-              className="hidden absolute z-1 shadow-elevation-md lg:block z-40"
-              style={style}
-              onMouseEnter={() => setHover(true)}
-              onMouseLeave={() => setHover(false)}
-            >
-              <SecondaryNav products={products[hoveredTab]} />
-            </animated.div>
-          ) : (
-            ''
-          )
-        )}
-        {/** Secondary my account transition */}
-        {myAccountTransition((style, click) =>
-          click ? (
-            <>
-              <Container css="hidden sm:block relative">
-                <div className="absolute px-1 right-0 z-50 flex justify-end">
-                  <animated.div ref={modal} style={style}>
-                    <MyAccount />
-                  </animated.div>
-                </div>
-              </Container>
-              <MobileSideDrawer
-                show={showMyAccount}
-                setShow={setShowMyAccount}
-                screen="sm:hidden"
-              >
-                <MyAccount sm points={getPoints} currency={account.currency} />
-              </MobileSideDrawer>
-            </>
-          ) : (
-            ''
-          )
-        )}
-        {/** Mobile menu transition */}
-        <MobileNav
-          show={openMenu}
-          setShow={setOpenMenu}
-          menu={menu}
-          products={products}
-        />
+                  <MyAccount
+                    sm
+                    points={getPoints}
+                    currency={account.currency}
+                  />
+                </MobileSideDrawer>
+              </>
+            ) : (
+              ""
+            )
+          )}
+          {/** Mobile menu transition */}
+          <MobileNav
+            show={openMenu}
+            setShow={setOpenMenu}
+            menu={menu}
+            products={products}
+          />
         </div>
       </nav>
     </>
@@ -283,7 +259,7 @@ function MobileNav({ show, setShow, menu, products }) {
                   : setOpenAccordion(false)
               }
             >
-              {item}
+              {item.title}
               <animated.div
                 style={{
                   transform: [ar, br][i].to((value) => `rotate(${value}deg)`),
@@ -299,9 +275,9 @@ function MobileNav({ show, setShow, menu, products }) {
               }}
             >
               <ul className="overflow-hidden pl-8 pr-4 bg-primary-100 ">
-                {products[i].map((product, i) => (
-                  <div className="first:pt-4 last:pb-4" key={`${product}${i}`}>
-                    <SecondaryNavMenu product={product} />
+                {products[i].map((product, index) => (
+                  <div className="first:pt-4 last:pb-4" key={`${product}${index}secondary`}>
+                    <SecondaryNavMenu icon={faIcons[i][index]} product={product} />
                   </div>
                 ))}
               </ul>
@@ -320,15 +296,15 @@ function MobileNav({ show, setShow, menu, products }) {
   );
 }
 
-function SecondaryNav({ products }) {
+function SecondaryNav({ iconSet, products }) {
   return (
     <>
       <div className="bg-neutral-100 w-screen overflow-x-hidden shadow-md">
         <Container>
           <ul className="py-6 grid grid-cols-3 gap-x-8 gap-y-4 items-stretch">
             {products.map((product, i) => (
-              <li key={product}>
-                <SecondaryNavMenu product={product} />
+              <li key={`${product}${i}`}>
+                <SecondaryNavMenu icon={iconSet[i]} product={product} />
               </li>
             ))}
           </ul>
@@ -338,11 +314,11 @@ function SecondaryNav({ products }) {
   );
 }
 
-function SecondaryNavMenu({ product }) {
+function SecondaryNavMenu({ icon, product }) {
   return (
     <>
       <div className="cursor-pointer h-full px-2 py-2 lg:px-6 lg:py-4 rounded flex gap-8 transition-colors lg:hover:bg-primary-100">
-        <div className="h-[26px] text-primary-500">{product.icon}</div>
+        <div className="h-[26px] text-primary-500">{icon}</div>
         <div className="flex flex-col gap-1">
           <div className="font-bold">{product.title}</div>
           <div className="text-neutral-600 font-normal">
@@ -362,7 +338,7 @@ function MobileSideDrawer({ screen, show, setShow, icon, children }) {
     enter: { x: 0 },
     leave: {
       x: -100,
-      pointerEvents: 'none',
+      pointerEvents: "none",
       config: {
         friction: 14,
       },
@@ -380,9 +356,9 @@ function MobileSideDrawer({ screen, show, setShow, icon, children }) {
   }
 
   useEffect(() => {
-    sideDrawerRef.current?.addEventListener('scroll', handleScroll);
+    sideDrawerRef.current?.addEventListener("scroll", handleScroll);
     return () => {
-      sideDrawerRef.current?.removeEventListener('scroll', handleScroll);
+      sideDrawerRef.current?.removeEventListener("scroll", handleScroll);
     };
   }, [show]);
   return mobileMenuTransition(({ x }, on) =>
@@ -400,7 +376,7 @@ function MobileSideDrawer({ screen, show, setShow, icon, children }) {
           >
             <div
               className={`${
-                overflow ? 'shadow-md' : 'shadow-none'
+                overflow ? "shadow-md" : "shadow-none"
               } transition-shadow duration-300 min-h-[73px] sticky top-0 z-20 bg-neutral-100 flex items-center border-b border-neutral-100`}
             >
               <div
@@ -416,7 +392,7 @@ function MobileSideDrawer({ screen, show, setShow, icon, children }) {
         <Scrium show={show} setShow={setShow} />
       </div>
     ) : (
-      ''
+      ""
     )
   );
 }
@@ -424,12 +400,12 @@ function MobileSideDrawer({ screen, show, setShow, icon, children }) {
 function MyAccount({ sm, points, currency }) {
   const links = [
     {
-      title: 'Points Activity',
-      href: '',
+      title: "Points Activity",
+      href: "",
     },
     {
-      title: 'My Rewards',
-      href: '',
+      title: "My Rewards",
+      href: "",
     },
   ];
   return !sm ? (
@@ -491,8 +467,8 @@ function generateRandomNumbers() {
   const remainingNumbers = Array.from({ length: 6 }, () =>
     generateRandomNumber(0, 9)
   );
-  const allNumbers = [firstNumber, ...remainingNumbers].join('');
-  const formattedNumbers = allNumbers.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+  const allNumbers = [firstNumber, ...remainingNumbers].join("");
+  const formattedNumbers = allNumbers.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   return formattedNumbers;
 }
 

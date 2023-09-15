@@ -9,13 +9,13 @@ const Link = ({ children, type, width, icon, iconPosition, href }) => {
     return iconPosition === 'left' ? 'flex-row-reverse' : '';
   };
   const styled = (type) => {
-    return type === 'colored' ? 'text-secondary-500' : 'text-neutral-900';
+    return type === 'colored' ? 'text-secondary-500' : type === 'dark' ? 'text-neutral-100' : 'text-neutral-900';
   };
   return (
     <a
       href={href}
       style={{ textDecorationSkipInk: 'none' }}
-      className={`flex cursor-pointer items-center ${gap(
+      className={`flex cursor-pointer items-center whitespace-nowrap ${gap(
         width
       )} ${flexDirection(iconPosition)} ${styled(type)} hover:underline`}
     >
