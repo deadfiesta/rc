@@ -24,3 +24,24 @@ body {
 .nspacebar-hide::-webkit-scrollbar {
   display: none;
 }
+
+@media (prefers-color-scheme: light) {
+  #fav-light {
+    display: block;
+  }
+
+  #fav-dark {
+    display: none;
+  }
+}
+
+/* Show dark mode favicon when the user prefers dark mode */
+@media (prefers-color-scheme: dark) {
+  #fav-light {
+    display: none;
+  }
+
+  #fav-dark {
+    display: block;
+  }
+}

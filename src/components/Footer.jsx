@@ -23,7 +23,7 @@ const Footer = ({ type }) => {
                     </li>
                   ))}
                 </ul>
-                <div className="flex gap-4 items-center text-primary-200">
+                <div className="flex gap-4 items-center text-primary-300">
                   <AscendaLogo mode="dark" />
                   Powered by Ascenda
                 </div>

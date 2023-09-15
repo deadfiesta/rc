@@ -1,20 +1,20 @@
-import Navbar from "./components/Navbar";
 import { useState, useEffect } from "react";
-
+import Navbar from "./components/Navbar";
 import Preloader from "./components/Preloader";
 import Carousel from "./components/Carousel";
 import Featured from "./components/Featured";
 import Quicklinks from "./components/Quicklinks";
 import Footer from "./components/Footer";
 import data from "./components/Data.json";
+import ChangeFavIcon from "./components/ChangeFavIcon";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const { defaultBanners, moneyBanners, carouselBanners } = data;
+  const { moneyBanners, carouselBanners } = data;
 
-  useEffect(()=> {
-    console.log(isLoading)
-  }, [isLoading])
+  useEffect(() => {
+    console.log(isLoading);
+  }, [isLoading]);
   return (
     <>
       {isLoading ? (
@@ -31,6 +31,7 @@ function App() {
           <Carousel banners={carouselBanners} type={5} />
           <Quicklinks />
           <Footer />
+          <ChangeFavIcon />
         </main>
       )}
     </>
