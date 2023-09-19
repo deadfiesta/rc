@@ -9,23 +9,127 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Container from "./Container";
 
-const Carousel = ({ type, banners }) => {
+const DraggableCarousel = ({ type, banners }) => {
   const marketingBanners = [...banners];
 
-  const [init, setInit] = useState(true);
-  const banner = useRef(0);
+  const moveAmt = 35;
+
   const [index, set] = useState(0);
 
-  const transition = useTransition(index, {
-    from: init ? { x: 0 } : { x: banner.current > index ? -100 : 100 },
-    enter: { x: 0 },
-    leave: { x: banner.current > index ? 100 : -100 },
-    onChange: () => (banner.current = index),
-  });
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [startX, setStartX] = useState(null);
+  const [scrub, setScrub] = useState(0);
+  const [position, setPosition] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const [carouselOffset, setCarouselOffset] = useState(0);
+
+  const [style, api] = useSpring(() => ({
+    x: position,
+  }));
+
+  function handleMouseDown(e) {
+    setPosition(index * -100);
+    setScrub(0);
+    setStartX(e.clientX);
+  }
+
+  function handleMouseMove(e) {
+    if (startX === null) return;
+
+    setScrub(((e.clientX - startX) / screenWidth) * 100);
+    setPosition(scrub + index * -100);
+
+    api.start({
+      x: position,
+      config: {
+        duration: 0,
+      },
+    });
+
+    if (index === 0) {
+      if (scrub > 0) {
+        setOffset(100 * marketingBanners.length);
+        setCarouselOffset(-100 * marketingBanners.length);
+      } else {
+        setOffset(0);
+        setCarouselOffset(0);
+      }
+    }
+    if (index === marketingBanners.length - 1) {
+      if (scrub < 0) {
+        setOffset(100 * marketingBanners.length);
+      } else {
+        setOffset(0);
+      }
+    }
+  }
+
+  function handleMouseUp() {
+    setStartX(null);
+
+    if (scrub < -1 * moveAmt) {
+      set(index + 1);
+    } else if (scrub > moveAmt) {
+      set((index - 1) % marketingBanners.length);
+    } else {
+      api.start({
+        x: index * -100,
+        config: {
+          mass: 1,
+          tension: 180,
+          friction: 24,
+        },
+        onRest: () => (setOffset(0), setCarouselOffset(0)),
+      });
+    }
+  }
+
+  function handleOnRest() {
+    setOffset(0);
+    setCarouselOffset(0);
+
+    if (index < 0) {
+      api.start({
+        x: (marketingBanners.length - 1) * -100,
+        config: {
+          duration: 0,
+        },
+        onRest: () => set(marketingBanners.length - 1),
+      });
+    }
+    if (index > marketingBanners.length - 1) {
+      api.start({
+        x: 0,
+        config: {
+          duration: 0,
+        },
+        onRest: () => set(0),
+      });
+    }
+  }
 
   useEffect(() => {
-    setInit(false);
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
+
+  useEffect(() => {
+    api.start({
+      x: index * -100,
+      config: {
+        mass: 1,
+        tension: 180,
+        friction: 24,
+      },
+      onRest: () => handleOnRest(),
+    });
+  }, [index]);
 
   const getCarouselCss = (type) => {
     switch (type) {
@@ -96,12 +200,24 @@ const Carousel = ({ type, banners }) => {
       ) : (
         ""
       )}
-      {transition(({ x }, i) => {
-        const slide = marketingBanners[i];
-        return (
-          <animated.div
-            className="absolute w-full h-full"
-            style={{ transform: x.to((value) => `translateX(${value}%)`) }}
+      <animated.ul
+        style={{
+          width: screenWidth,
+          transform: style.x.to(
+            (value) => `translateX(${value + carouselOffset}%)`
+          ),
+        }}
+        onPointerDown={handleMouseDown}
+        onPointerMove={handleMouseMove}
+        onPointerUp={handleMouseUp}
+        onPointerLeave={startX !== null ? handleMouseUp : null}
+        className="w-screen h-full cursor-default grid auto-cols-[100%] grid-flow-col"
+      >
+        {marketingBanners.map((slide, i) => (
+          <li
+            key={slide + i}
+            style={i === 0 ? { transform: `translateX(${offset}%)` } : null}
+            className="w-screen"
           >
             <Banner
               i={i}
@@ -112,18 +228,19 @@ const Carousel = ({ type, banners }) => {
               button={slide?.cta}
               image={slide?.image}
             />
-          </animated.div>
-        );
-      })}
+          </li>
+        ))}
+      </animated.ul>
       {marketingBanners.length > 1 ? (
         <ul className="absolute bottom-0 w-full flex gap-2 justify-center pb-4 md:pb-6">
           {marketingBanners.map((item, i) => (
             <li key={`${item}button${i}`}>
               <NavigationButton
+                length={marketingBanners.length}
                 type={type}
                 click={set}
                 i={i}
-                isCurrent={index === i ? true : false}
+                current={index}
               />
             </li>
           ))}
@@ -135,7 +252,7 @@ const Carousel = ({ type, banners }) => {
   );
 };
 
-Carousel.defaultProps = {
+DraggableCarousel.defaultProps = {
   type: 1,
 };
 
@@ -222,7 +339,7 @@ function Banner({ i, type, image, title, subtitle, button, banners }) {
             </div>
             {type !== 4 ? (
               <img
-                className="w-full md:w-1/2 max-h-[288px] object-cover my-4 rounded"
+                className="w-full md:w-1/2 max-h-[288px] object-cover my-4 rounded pointer-events-none"
                 src={image}
               />
             ) : (
@@ -425,7 +542,7 @@ function ArrowButton({ left, right, type, click }) {
       case 2:
       case 3:
       case 4:
-        return "bg-neutral-200 text-neutral-900 transition-colors hover:bg-neutral-300 active:bg-neutral-400 disabled:text-neutral-300 disabled:bg-neutral-400";
+        return "backdrop-blur-md bg-neutral-400/30 text-neutral-900 transition-colors hover:bg-neutral-300 active:bg-neutral-400 disabled:text-neutral-300 disabled:bg-neutral-400";
       case 5:
         return "backdrop-blur-md bg-neutral-100/30 text-primary-500 border border-primary-500 active:border-primary-600 hover:border-primary-400 hover:bg-neutral-400/30 hover:text-primary-400 disabled:border-neutral-400";
     }
@@ -457,15 +574,22 @@ function ArrowButton({ left, right, type, click }) {
   );
 }
 
-function NavigationButton({ click, type, isCurrent, i }) {
+function NavigationButton({ click, type, i, current, length }) {
+  const getCurrent = (current) => {
+    if (current < 0) {
+      return length - 1;
+    } else if ( current > length - 1) {
+      return 0
+    } else return current;
+  };
   const spring = useSpring({
-    width: isCurrent ? 16 : 8,
+    width: getCurrent(current) === i ? 16 : 8,
   });
   const themeCss = (type) => {
     switch (type) {
       default:
       case 1:
-        return isCurrent
+        return getCurrent(current) === i
           ? "bg-neutral-100"
           : "w-2 bg-neutral-600 cursor-pointer";
         break;
@@ -473,7 +597,7 @@ function NavigationButton({ click, type, isCurrent, i }) {
       case 3:
       case 4:
       case 5:
-        return isCurrent
+        return getCurrent(current) === i
           ? "bg-primary-500"
           : "w-2 bg-primary-300 cursor-pointer";
         break;
@@ -488,4 +612,4 @@ function NavigationButton({ click, type, isCurrent, i }) {
   );
 }
 
-export default Carousel;
+export default DraggableCarousel;
