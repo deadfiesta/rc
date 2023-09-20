@@ -131,6 +131,17 @@ const DraggableCarousel = ({ type, banners }) => {
     });
   }, [index]);
 
+  useEffect(() => {
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  });
+
   const getCarouselCss = (type) => {
     switch (type) {
       default:
@@ -207,10 +218,7 @@ const DraggableCarousel = ({ type, banners }) => {
             (value) => `translateX(${value + carouselOffset}%)`
           ),
         }}
-        onPointerDown={handleMouseDown}
-        onPointerMove={handleMouseMove}
-        onPointerUp={handleMouseUp}
-        onPointerLeave={startX !== null ? handleMouseUp : null}
+        onMouseDown={handleMouseDown}
         className="w-screen h-full cursor-default grid auto-cols-[100%] grid-flow-col"
       >
         {marketingBanners.map((slide, i) => (
@@ -318,15 +326,17 @@ function Banner({ i, type, image, title, subtitle, button, banners }) {
           <div
             className={`w-full h-full flex flex-col-reverse ${
               type === 3 ? "md:flex-row-reverse" : "md:flex-row"
-            }  gap-12 justify-center xl:gap-16 md:items-center`}
+            }  gap-4 justify-end xl:gap-16 md:items-center`}
           >
             <div
               className={`${
                 type !== 4 ? "md:w-7/12" : ""
               } flex flex-col gap-4 text-primary-700`}
             >
-              <h1 className="text-4xl font-bold  lg:text-5xl">{title}</h1>
-              <p className="font-normal max-w-[1008px] sm:text-lg ">
+              <h1 className="text-4xl font-bold select-none lg:text-5xl">
+                {title}
+              </h1>
+              <p className="font-normal max-w-[1008px] select-none sm:text-lg ">
                 {subtitle}
               </p>
               {button && (
@@ -542,7 +552,7 @@ function ArrowButton({ left, right, type, click }) {
       case 2:
       case 3:
       case 4:
-        return "backdrop-blur-md bg-neutral-400/30 text-neutral-900 transition-colors hover:bg-neutral-300 active:bg-neutral-400 disabled:text-neutral-300 disabled:bg-neutral-400";
+        return "backdrop-blur-md bg-neutral-400/30 text-neutral-900 transition-colors hover:bg-neutral-600/30 active:bg-neutral-800/30 disabled:text-neutral-300 disabled:bg-neutral-400";
       case 5:
         return "backdrop-blur-md bg-neutral-100/30 text-primary-500 border border-primary-500 active:border-primary-600 hover:border-primary-400 hover:bg-neutral-400/30 hover:text-primary-400 disabled:border-neutral-400";
     }
@@ -578,8 +588,8 @@ function NavigationButton({ click, type, i, current, length }) {
   const getCurrent = (current) => {
     if (current < 0) {
       return length - 1;
-    } else if ( current > length - 1) {
-      return 0
+    } else if (current > length - 1) {
+      return 0;
     } else return current;
   };
   const spring = useSpring({

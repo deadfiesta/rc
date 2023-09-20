@@ -372,7 +372,7 @@ function MobileSideDrawer({ screen, show, setShow, icon, children }) {
         >
           <div
             ref={sideDrawerRef}
-            className="h-screen overflow-y-auto spacebar-hide bg-neutral-100 shadow-xl flex flex-col"
+            className="h-screen overflow-y-auto overscroll-none spacebar-hide bg-neutral-100 shadow-xl flex flex-col"
           >
             <div
               className={`${

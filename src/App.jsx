@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import data from "./components/Data.json";
 import ChangeFavIcon from "./components/ChangeFavIcon";
 
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const { defaultBanners, moneyBanners, carouselBanners } = data;
