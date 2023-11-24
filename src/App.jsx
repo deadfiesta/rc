@@ -24,7 +24,7 @@ function App() {
       ) : (
         <main className="min-h-screen bg-neutral-200">
           <Navbar />
-          <DraggableCarousel banners={defaultBanners} type={2} />
+          <DraggableCarousel banners={defaultBanners} type={1} />
           {/** Change type to 1, 2, 3 for standard marketing banner variants
            * 4 for Money2020 banner
            * 5 for Carousel

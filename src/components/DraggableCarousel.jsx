@@ -132,13 +132,13 @@ const DraggableCarousel = ({ type, banners }) => {
   }, [index]);
 
   useEffect(() => {
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("pointermove", handleMouseMove);
+    document.addEventListener("pointerup", handleMouseUp);
 
     // Clean up the event listener when the component unmounts
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("pointermove", handleMouseMove);
+      document.removeEventListener("pointerup", handleMouseUp);
     };
   });
 
@@ -218,7 +218,7 @@ const DraggableCarousel = ({ type, banners }) => {
             (value) => `translateX(${value + carouselOffset}%)`
           ),
         }}
-        onMouseDown={handleMouseDown}
+        onPointerDown={handleMouseDown}
         className="w-screen h-full cursor-default grid auto-cols-[100%] grid-flow-col"
       >
         {marketingBanners.map((slide, i) => (
